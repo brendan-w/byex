@@ -3,59 +3,44 @@
 a = "<a href=\"bar\" class=\"foo\"></a>"
 b = "<a class=\"foo\" href=\"bar\"></a>"
 
-text = """
-<html>
-<head></head>
-<body>
-<header>
-<a href=\"bar\" class=\"foo\"></a>
-<a href=\"bar\" class=\"bazz\"></a>
-<a href=\"bar\" class=\"asdfasdfasdf\"></a>
-</header>
-<footer></footer>
-</body>
-</html>
-"""
+text = "<header><a href=\"bar\" class=\"foo\"></a><a href=\"bar\" class=\"asdfasdfasdf\"></a></header>"
 
-segments = {} # len : [(a_pos, b_pos)]
+T="#"
+F=" "
 
-def add_segment(rl, ai, bi):
-    segments[rl] = segments.get(rl, []) + [(ai-rl, bi-rl)]
+def cdiff(bigger, smaller):
+    substrs = []
 
-def cdiff(a, b, shift):
-    output = []
-    rl = 0
-    for i in range(len(a)):
-        ac = a[i]
-        bi = (i + shift) % len(a)
-        bc = b[bi]
+    # loop through starting indeicies in the larger string
+    for i in range(len(bigger)):
+        line = ""
+        run = 0
+        for k in range(len(smaller)):
 
-        if ac == bc:
-            output += [1]
-            rl += 1
-        else:
-            output += [0]
-            if rl > 0:
-                add_segment(rl, i, bi)
-                rl = 0
+            # when the smaller string falls off the end of the bigger string
+            if i + k > (len(bigger) - 1):
+                break;
 
-    if rl > 0:
-        add_segment(rl, i, bi)
+            s_char = smaller[k]
+            b_char = bigger[i + k]
 
-    return output
+            if s_char == b_char:
+                line += T
+                run += 1
+            else:
+                line += F
+                if run > 0:
+                    substrs.append((run, i, k))
+                    run = 0
+
+        if run > 0:
+            substrs.append((run, i, k))
 
 
-lines = []
+        print((F*i) + line + (F*(len(bigger)-len(smaller)-i)))
 
-for shift in range(len(a)):
-    lines.append(cdiff(a, b, shift))
+    # sort by run length
+    print(sorted(substrs, key=lambda substr: substr[0]))
 
-
-for line in lines:
-    readout = "".join(["#" if i else "_" for i in line])
-    chars = "".join([c if line[i] else " " for i, c in enumerate(a)])
-    print("|" + readout + "|" + chars + "|")
-
-
-for rl in segments:
-    print(str(rl) + ": " + str(segments[rl]))
+print(text)
+cdiff(text, a)
