@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 
-a = "<a href=\"foo\"></a>"
-b = "<a href=\"bar\"></a>"
+#a = "<a href=\"foo\"></a>"
+a = "<a href=\"/beam-beats\">Beam Beats</a>"
+b = "<a href=\"/lasers\">Laser Projection</a>"
+
+
+rep = "<a href=\"bar\"></a>"
 
 #text = "<header><a href=\"foo\"></a><a href=\"bar\"></a><a href=\"baaaaar\"></a></header>"
 text = """
@@ -68,9 +72,9 @@ F="_"
 def cdiff(bigger, smaller):
     substrs = []
 
-    # loop through starting indeicies in the larger string
+    # loop through starting indicies in the larger string
     for i in range(len(bigger)):
-        #line = ""
+        # line = ""
         run = 0
         for k in range(len(smaller)):
 
@@ -82,17 +86,17 @@ def cdiff(bigger, smaller):
             b_char = bigger[i + k]
 
             if s_char == b_char:
-                #line += T
+                # line += T
                 run += 1
             else:
-                #line += F
+                # line += F
                 if run > 0:
-                    substrs.append((run, i-run, k-run))
+                    substrs.append((run, (i+k)-run, k-run))
                     run = 0
 
         # catch matches at the tail end
         if run > 0:
-            substrs.append((run, i-run, k-run))
+            substrs.append((run, (i+k)-run, k-run))
 
 
         #print((F*i) + line + (F*(len(bigger)-len(smaller)-i)))
@@ -101,15 +105,22 @@ def cdiff(bigger, smaller):
     # sort in this order:
     #    ascending starting index in the larger
     #    ascending starting index in the smaller
-    #    descending run length (neccessary?)
-    substrs = sorted(substrs, key=lambda substr: (substr[1], substr[2] -substr[0]))
+    substrs = sorted(substrs, key=lambda substr: (substr[1], substr[2]))
     return substrs
 
 
-substrs = cdiff(text, a)
-#print(substrs)
+substrs = cdiff(b, a)
+
+for substr in substrs:
+    comment = ""
+    if substr[2] == 0:
+        comment = " <--- start"
+    elif substr[0] + substr[2] == (len(a) - 1):
+        comment = " <--- end"
+    print(repr(substr) + comment)
 
 
+"""
 matches = []
 match = []
 i = 0
@@ -123,3 +134,4 @@ for substr in substrs:
 
 for m in matches:
     print(m)
+"""
