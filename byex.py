@@ -99,13 +99,27 @@ def cdiff(bigger, smaller):
         #print(line)
 
     # sort in this order:
+    #    ascending starting index in the larger
     #    ascending starting index in the smaller
-    #    descending run length
-    #    ascending starting index in the larger (neccessary?)
-    substrs = sorted(substrs, key=lambda substr: (substr[2], -substr[0], substr[1]))
+    #    descending run length (neccessary?)
+    substrs = sorted(substrs, key=lambda substr: (substr[1], substr[2] -substr[0]))
     return substrs
 
 
-subtrs = cdiff(text, a)
-print(substrs)
+substrs = cdiff(text, a)
+#print(substrs)
 
+
+matches = []
+match = []
+i = 0
+for substr in substrs:
+    if substr[2] < i:
+        matches.append(match)
+        match = [substr]
+    else:
+        match.append(substr)
+    i = substr[2]
+
+for m in matches:
+    print(m)
