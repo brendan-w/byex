@@ -109,7 +109,7 @@ def cdiff(bigger, smaller):
     return substrs
 
 
-substrs = cdiff(b, a)
+substrs = cdiff(text, a)
 
 for substr in substrs:
     comment = ""
@@ -118,7 +118,6 @@ for substr in substrs:
     elif substr[0] + substr[2] == (len(a) - 1):
         comment = " <--- end"
     print(repr(substr) + comment)
-
 
 """
 matches = []
