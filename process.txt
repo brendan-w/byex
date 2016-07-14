@@ -1,7 +1,0 @@
-<div><a href="http://brendan-w.com/" class="foo"></a></div>
-     [][                           ][          ][   ]
-     A              B                    C        D
-
-<header><a class="foo" href="http://brendan-w.com/"></a></header>
-        [][          ][                           ][   ]
-        A      C                 B                   D
