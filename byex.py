@@ -28,8 +28,28 @@ def tokenize(s):
     # strip out whitespace
     return [t for t in tokens if not re.match("\s", t)]
 
-for line in text:
-    print(tokenize(line))
+lines = [tokenize(line) for line in text]
 
+for line in lines:
+    print(line)
+
+target = tokenize(target)
 print("target:")
-print(repr(tokenize(target)))
+print(target)
+
+
+def get_exemplar(lines, target):
+    """ find the line with the most matching tokens """
+    best = 0
+    exemplar = ""
+
+    for line in lines:
+        n = sum([ int(token in target) for token in line ])
+        if n > best:
+            best = n
+            exemplar = line
+
+    return exemplar
+
+print("exemplar:")
+print(get_exemplar(lines, target))
